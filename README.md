@@ -18,3 +18,18 @@ Methods
 The Python code has a few different searchers, depth-first, GBFS, and finally an A*.
 
 The C++ implements the A* searcher, but I never bothered with path replacement.
+
+
+Building & Running
+------------------
+
+Both programs accept a configuration on the command line:
+
+```
+$ clang++ -std=c++11 s1.cpp -O3 -o s1
+$ ./s1 "wrg wg wgo yo wob wb ygr yb wo yrb wr wbr yg yog yr ybo"
+```
+
+```
+$ python square1.py "wrg wg wgo yo wob wb ygr yb wo yrb wr wbr yg yog yr ybo"
+```
