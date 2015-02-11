@@ -161,7 +161,6 @@ def perform_move (st, sb, (mt, mb)):
     sb0 = rotate (sb, j+1)
     st0 = jp + st0[ni:]
     sb0 = ip + sb0[nj:]
-    import pdb; pdb.set_trace()
     return canon(st0), canon(sb0)
 
 def canon (ring):
@@ -459,7 +458,6 @@ class AStar:
                 self.closed[key] = item
                 for move1 in valid_moves (st, sb):
                     st0, sb0 = perform_move (st, sb, move1)
-                    import pdb; pdb.set_trace()
                     key0 = st0, sb0
                     path = ((st0, sb0), move0)
                     # f(x) := g(x) + h(x)
@@ -489,10 +487,8 @@ class AStar:
                             item = [f, path, st0, sb0]
                             self.put (key0, item)
 
-def t1():
+def t1(st, sb):
     global best
-    st = name_to_num ('wb wob wbr wr wrg wg wgo wo'.split())
-    sb = name_to_num ('yog yo ybo yb yrb yr ygr yg'.split())
     print N(st), N(sb)
     print 'score', score_position (st, sb)
     print 'hit enter:',
@@ -501,10 +497,8 @@ def t1():
     s = Searcher (70)
     s.search (st, sb, [])
 
-def t2():
+def t2 (st, sb):
     global best
-    st = name_to_num ('wb wob wbr wr wrg wg wgo wo'.split())
-    sb = name_to_num ('yog yo ybo yb yrb yr ygr yg'.split())
     print N(st), N(sb)
     print 'score', score_position (st, sb)
     print 'hit enter:',
@@ -513,12 +507,8 @@ def t2():
     s = GBFS()
     s.search (st, sb)
 
-def t3():
+def t3 (st, sb):
     global best
-    #st = name_to_num ('wrg wg wgo wo wob wb wbr wr'.split())
-    #sb = name_to_num ('ygr yg ybo yo yog yb yrb yr'.split())
-    st = name_to_num ("wbr wr wrg wg wob wo wgo wb".split())
-    sb = name_to_num ("yrb yr ygr yg yog yo ybo yb".split())
     print N(st), N(sb)
     print 'score', score_position (st, sb)
     print 'hit enter:',
@@ -527,4 +517,23 @@ def t3():
     s = AStar()
     s.search (st, sb)
 
-t3()
+def parse_config (s):
+    parts = s.split()
+    st = []
+    sb = []
+    wsum = 0
+    for part in parts:
+        part = rmap[part]
+        wsum += wmap[part]
+        if wsum > 12:
+            sb.append (part)
+        else:
+            st.append (part)
+    return st, sb
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        s = "wb wob wbr wr wrg wg wgo wo yog yo ybo yb yrb yr ygr yg"
+    else:
+        s = sys.argv[1]
+    t3 (*parse_config (s))
