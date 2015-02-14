@@ -60,6 +60,16 @@ T sum(const ConsList<T>& l)
   return car(l)+sum(cdr(l));
 }
 
+template<typename T>
+ConsList<T> reverse(const ConsList<T>& l, const ConsList<T>& a=ConsList<T>())
+{
+  if (!l) {
+    return a;
+  } else {
+    return reverse (cdr (l), cons (car (l), a));
+  }
+}
+
 #include <iostream>
 
 template<class T>
