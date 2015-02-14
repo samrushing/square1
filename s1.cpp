@@ -276,6 +276,59 @@ perform_move (ring_t & st, ring_t & sb, move_t & mi, move_t & mj)
   canonicalize (sb);	  
 }
 
+void 
+print_move (state_t s0, state_t s1)
+{
+  ring_t st0, st1, sb0, sb1;
+  state_2_rings (s0, st0, sb0);
+  state_2_rings (s1, st1, sb1);
+  int size = st1.size();
+  int n0 = 0;
+  // find the first piece not in the old top
+  while (find (st0.begin(), st0.end(), st1[n0]) != st0.end()) {
+    n0++;
+  }
+  // find the next piece that *is* in the old top.
+  int n1 = n0;
+  while (find (st0.begin(), st0.end(), st1[n1%size]) == st0.end()) {
+    n1++;
+  }
+  // how many pieces until we get a bottom one?
+  int n2 = n1;
+  while (find (st0.begin(), st0.end(), st1[n2%size]) != st0.end()) {
+    n2++;
+  }
+  // leading piece from the bottom...
+  uint8_t p0 = st1[n2%size];
+  uint8_t p1 = st1[(n2-1)%size];
+  fprintf (stderr, "%3s | %3s\t", name_rmap[p0].c_str(), name_rmap[p1].c_str());
+}
+
+
+void
+print_state (state_t state)
+{
+  ring_t st, sb;
+  state_2_rings (state, st, sb);
+  pprint_rings (st, sb);
+}
+
+void
+print_solution (path_t & path)
+{
+  auto path0 = reverse (path);
+  state_t s0 = car (path0);
+  path0 = cdr (path0);
+  print_state (s0);
+  while (!isEmpty (path0)) {
+    state_t s1 = car (path0);
+    print_move (s0, s1);
+    s0 = s1;
+    path0 = cdr (path0);
+    print_state (s1);
+  }
+}
+
 // A* search: still missing optimizations like replacing paths.
 
 void
@@ -310,11 +363,7 @@ search (state_t start)
     if (key == solved) {
       fprintf (stderr, "solved it.\n");
       auto path = std::get<1>(item);
-      while (!isEmpty(path)) {
-	state_2_rings (car(path), st, sb);
-	pprint_rings (st, sb);
-	path = cdr (path);
-      }
+      print_solution (path);
       return;
     } else {
       closed.insert (key);
