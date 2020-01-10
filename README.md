@@ -33,3 +33,55 @@ $ ./s1 "wrg wg wgo yo wob wb ygr yb wo yrb wr wbr yg yog yr ybo"
 ```
 $ python square1.py "wrg wg wgo yo wob wb ygr yb wo yrb wr wbr yg yog yr ybo"
 ```
+
+Encoding the state of the puzzle
+--------------------------------
+
+Each piece is described by the colors on its sides: either 2 or 3 colors.
+Starting at the top (bottom), read the colors off clockwise.  So 'wrg' means
+'white red green'.
+
+Starting from e.g. the front left top, follow the pieces around clockwise.
+Once you've encoded all the top pieces, start from the same corner on the bottom
+and encode the pieces clockwise (but counter-clockwise as viewed from underneath).
+
+The puzzle need not be in a square shape to encode it.
+
+Applying the Solution
+---------------------
+
+    ...
+    solved it.
+    [wg yog wb wbr yr ybo yb ygr ] [wrg yg wob wr yrb yo wgo wo ]
+     wr | wbr	[wrg wg yog wb wbr wr wob yg ] [wgo wo ygr yb ybo yr yrb yo ]
+    wgo |  wr	[wgo yo yrb yr yog wb wbr wr ] [wrg yg wob wo ygr yb ybo wg ]
+     yb | wgo	[wgo yb ygr wo wob wb wbr wr ] [wrg yg yog yr yrb yo ybo wg ]
+    ...
+
+
+Each step in the solution is performed as follows: The two pieces described,
+are on the bottom and top respectively, and you will bring the bottom piece
+[on the right] to match up with the top piece [on the left], so they are next
+to each other in the back.
+
+        o x o     o x y
+      o o o     o o o
+    o o o     o o o
+    o o o     o o o
+    o o y     o o o
+
+In the example solution above, you would place 'wr' (white red) to the right
+of the flip line on the bottom front, and 'wbr' (white blue red) to the left of the
+dividing line on the top back.
+
+          --- wbr ---
+       --- --- ---
+    --- --- wr
+
+Then turn the right side clockwise to bring the two
+pieces together:
+
+          --- wbr wr
+       --- --- ---
+    --- --- ---
+
